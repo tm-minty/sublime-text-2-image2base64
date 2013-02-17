@@ -19,6 +19,7 @@ class I2b64Change(sublime_plugin.TextCommand):
         view = self.view
         view.replace(edit, sublime.Region(0, view.size()), image)
         view.set_read_only(True)
+	view.run_command("select_all")
 
 
 class I2b64Panel(sublime_plugin.TextCommand):
