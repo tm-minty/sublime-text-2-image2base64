@@ -8,7 +8,7 @@ class Image2Base64(sublime_plugin.EventListener):
         if view.file_name():
             fileName, fileExtension = os.path.splitext(view.file_name())
             if fileExtension.lower() in conv_extensions:
-                image = convert_image(view)
+                image = convert_image(view, fileExtension.lower())
                 if image:
                     view.run_command("i2b64_change", {"image": image})
                     #view.run_command("i2b64_panel", {"image": image})
@@ -47,8 +47,8 @@ conv_extensions = [
     ]
 
 
-def convert_image(view):
+def convert_image(view, ext):
     with open(view.file_name(), "rb") as image_file:
         encoded_string = base64.b64encode(image_file.read())
-        return encoded_string
+        return 'data:image/%s;base64,%s' % (ext.replace('.', ''), encoded_string)
     return None
