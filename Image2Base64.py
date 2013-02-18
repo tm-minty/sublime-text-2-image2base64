@@ -44,7 +44,6 @@ conv_extensions = [
         ".gif",
         ".png",
         ".bmp",
-        ".ico"
     ]
 
 
