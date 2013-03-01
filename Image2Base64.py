@@ -7,11 +7,14 @@ class Image2Base64(sublime_plugin.EventListener):
     def on_load(self, view):
         if view.file_name():
             fileName, fileExtension = os.path.splitext(view.file_name())
-            if fileExtension.lower() in conv_extensions:
-                image = convert_image(view, fileExtension.lower())
-                if image:
-                    view.run_command("i2b64_change", {"image": image})
-                    #view.run_command("i2b64_panel", {"image": image})
+            extension = fileExtension.lower().replace('.','')
+            for mime, extensions in mime_extensions.items():
+                if extension in extensions:
+                    image = convert_image(view, mime)
+                    if image:
+                        view.run_command("i2b64_change", {"image": image})
+                        #view.run_command("i2b64_panel", {"image": image})
+                    break
 
 
 class I2b64Change(sublime_plugin.TextCommand):
@@ -38,17 +41,17 @@ class I2b64Panel(sublime_plugin.TextCommand):
             print self.image
 
 
-conv_extensions = [
-        ".jpg",
-        ".jpeg",
-        ".gif",
-        ".png",
-        ".bmp",
-    ]
+mime_extensions = {
+        "image/gif":        ["gif"],
+        "image/jpeg":       ["jpg","jpeg","jpe"],
+        "image/png":        ["png"],
+        "image/x-icon":     ["ico"],
+        "image/x-ms-bmp":   ["bmp"],
+    }
 
 
-def convert_image(view, ext):
+def convert_image(view, mime):
     with open(view.file_name(), "rb") as image_file:
         encoded_string = base64.b64encode(image_file.read())
-        return 'data:image/%s;base64,%s' % (ext.replace('.', ''), encoded_string)
+        return 'data:%s;base64,%s' % (mime, encoded_string)
     return None
