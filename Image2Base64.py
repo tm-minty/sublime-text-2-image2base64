@@ -53,6 +53,6 @@ mime_extensions = {
 
 def convert_image(view, mime):
     with open(view.file_name(), "rb") as image_file:
-        encoded_string = base64.b64encode(image_file.read())
-        return 'data:%s;base64,%s' % (mime, encoded_string)
+        encoded_bytes = base64.b64encode(image_file.read())
+        return 'data:%s;base64,%s' % (mime, encoded_bytes.decode())
     return None
