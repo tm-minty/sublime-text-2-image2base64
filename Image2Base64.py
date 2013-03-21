@@ -20,6 +20,7 @@ class Image2Base64(sublime_plugin.EventListener):
 class I2b64Change(sublime_plugin.TextCommand):
     def run(self, edit, image):
         view = self.view
+        view.set_scratch(True)
         view.replace(edit, sublime.Region(0, view.size()), image)
         view.set_read_only(True)
         view.run_command("select_all")
