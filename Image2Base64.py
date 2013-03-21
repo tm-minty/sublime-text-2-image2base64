@@ -22,23 +22,23 @@ class I2b64Change(sublime_plugin.TextCommand):
         view = self.view
         view.replace(edit, sublime.Region(0, view.size()), image)
         view.set_read_only(True)
-	view.run_command("select_all")
+        view.run_command("select_all")
 
 
 class I2b64Panel(sublime_plugin.TextCommand):
     def run(self, edit, image):
         window = self.view.window()
         self.image = image
-        print "window"
+        print("window")
         items = []
         items.append("Copy base64 image to clipboard")
         items.append("Don't copy base64 image to clipboard")
-        print items
+        print(items)
         window.show_quick_panel(items, self.on_done)
 
     def on_done(self, selected):
         if selected == 0:
-            print self.image
+            print(self.image)
 
 
 mime_extensions = {
