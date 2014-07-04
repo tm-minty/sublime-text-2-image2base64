@@ -104,5 +104,6 @@ class ImageBase64ToClipboardCommand(sublime_plugin.WindowCommand):
             'Select the image to be copied to clipboard')
 
     def copy_image(self, item):
-        file_name, file_path, mime = self.project_files[item]
-        copy_image_to_clipboard(file_name, convert_image(file_path, mime))
+        if item != -1:
+            file_name, file_path, mime = self.project_files[item]
+            copy_image_to_clipboard(file_name, convert_image(file_path, mime))
