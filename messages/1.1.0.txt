@@ -1,0 +1,10 @@
+============================
+======= Image2Base64 =======
+============================
+
+Version 1.1.0
+
+Changelog:
+- Sublime Text 3 support
+- New way to convert image to base64:
+	Press Ctrl+i+b (hold Ctrl and consequently press i and b), like image->base64. Then select image to be copied to clipboard as base64 code.
