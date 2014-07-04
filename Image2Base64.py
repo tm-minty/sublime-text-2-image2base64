@@ -2,46 +2,6 @@
 import sublime, sublime_plugin
 import os, base64
 
-
-class Image2Base64(sublime_plugin.EventListener):
-    def on_load(self, view):
-        if view.file_name():
-            fileName, fileExtension = os.path.splitext(view.file_name())
-            extension = fileExtension.lower().replace('.','')
-            for mime, extensions in mime_extensions.items():
-                if extension in extensions:
-                    image = convert_image(view, mime)
-                    if image:
-                        view.run_command("i2b64_change", {"image": image})
-                        #view.run_command("i2b64_panel", {"image": image})
-                    break
-
-
-class I2b64Change(sublime_plugin.TextCommand):
-    def run(self, edit, image):
-        view = self.view
-        view.set_scratch(True)
-        view.replace(edit, sublime.Region(0, view.size()), image)
-        view.set_read_only(True)
-        view.run_command("select_all")
-
-
-class I2b64Panel(sublime_plugin.TextCommand):
-    def run(self, edit, image):
-        window = self.view.window()
-        self.image = image
-        print("window")
-        items = []
-        items.append("Copy base64 image to clipboard")
-        items.append("Don't copy base64 image to clipboard")
-        print(items)
-        window.show_quick_panel(items, self.on_done)
-
-    def on_done(self, selected):
-        if selected == 0:
-            print(self.image)
-
-
 mime_extensions = {
         "image/gif":        ["gif"],
         "image/jpeg":       ["jpg","jpeg","jpe"],
@@ -50,9 +10,76 @@ mime_extensions = {
         "image/x-ms-bmp":   ["bmp"],
     }
 
-
-def convert_image(view, mime):
-    with open(view.file_name(), "rb") as image_file:
+def convert_image(file, mime):
+    with open(file, "rb") as image_file:
         encoded_bytes = base64.b64encode(image_file.read())
         return 'data:%s;base64,%s' % (mime, encoded_bytes.decode())
     return None
+
+def copy_image_to_clipboard(file_name, image):
+    sublime.status_message(file_name + ' copied to clipboard as Base64')
+    sublime.set_clipboard(image)
+
+def get_image_info(file_name):
+    name, extension = os.path.splitext(file_name)
+    extension = extension.lower().replace('.', '')
+    mime = None
+    for m, extensions in mime_extensions.items():
+        if extension in extensions:
+            mime = m
+    return name, extension, mime
+
+class Image2Base64(sublime_plugin.EventListener):
+    def on_load(self, view):
+        if view.file_name():
+            file_name, file_extension, mime = get_image_info(view.file_name())
+            if mime:
+                converted_image = convert_image(view.file_name(), mime)
+                if converted_image:
+                    view.run_command("i2b64_change", {"image": converted_image})
+                    sublime.active_window().run_command("i2b64_copy_panel", {"image": converted_image})
+
+class I2b64ChangeCommand(sublime_plugin.TextCommand):
+    def run(self, edit, image):
+        view = self.view
+        view.set_scratch(True)
+        view.replace(edit, sublime.Region(0, view.size()), image)
+        view.set_read_only(True)
+        view.run_command("select_all")
+
+class I2b64CopyPanelCommand(sublime_plugin.WindowCommand):
+    def run(self, image):
+        self.image = image
+        self.window.show_quick_panel(['Copy base64 image to clipboard'], self.copy_image)
+
+    def copy_image(self, item):
+        if item is 0 and self.image:
+            copy_image_to_clipboard('Image', self.image)
+
+class ImageBase64ToClipboardCommand(sublime_plugin.WindowCommand):
+    def run(self):
+        sublime.status_message('Scanning project folders...')
+        self.files_panel = []
+        self.project_files = []
+        open_folders = self.window.folders()
+        if len(open_folders) > 0:
+            for folder in open_folders:
+                for fold in os.walk(folder):
+                    subdir, dir_name, files = fold
+                    for f in files:
+                        file_name, extension, mime = get_image_info(f)
+                        if mime:
+                            if os.path.relpath(subdir, folder) is '.':
+                                relpath = ''
+                            else:
+                                relpath = os.sep + os.path.relpath(subdir, folder)
+                            self.files_panel.append([f, os.path.split(folder)[-1] + relpath + os.sep])
+                            self.project_files.append([f, subdir + os.sep + f, mime])
+            self.window.show_quick_panel(self.files_panel, self.copy_image)
+            sublime.status_message('Select the image to be copied to clipboard')
+        else:
+            sublime.status_message('Add some folders to project for searching images')
+
+    def copy_image(self, item):
+        file_name, file_path, mime = self.project_files[item]
+        copy_image_to_clipboard(file_name, convert_image(file_path, mime))

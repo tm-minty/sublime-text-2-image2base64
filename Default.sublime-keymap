@@ -1,0 +1,3 @@
+[
+	{ "keys": ["ctrl+i", "ctrl+b"], "command": "image_base64_to_clipboard" }
+]
