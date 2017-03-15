@@ -11,6 +11,8 @@ like ```i```mage->```b```ase64. Then select image to be copied to clipboard as b
 
 Also if you use Sublime Text 2 you can just click on image file in sidebar or open it and it will be opened as base64 code.
 
+Press <kbd>Ctrl+u+b</kbd> (hold <kbd>Ctrl</kbd> and consequently press <kbd>u</kbd> and <kbd>b</kbd>), 
+like ```u```rl->```b```ase64. Then input image url to be copied to clipboard as base64 code.
 
 ## Install
 ### Package Controll
