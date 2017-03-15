@@ -1,0 +1,10 @@
+============================
+======= Image2Base64 =======
+============================
+
+Version 1.1.1
+
+Changelog:
+- Added line splitting for correct syntax highligh (https://github.com/tm-minty/sublime-text-2-image2base64/issues/12)
+- Added feature to convert image to base64 from url (https://github.com/tm-minty/sublime-text-2-image2base64/issues/11):
+    Press Ctrl+u+b (hold Ctrl and consequently press u and b), like url->base64. Then input image url to be copied to clipboard as base64 code. 

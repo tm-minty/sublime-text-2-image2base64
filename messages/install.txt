@@ -8,3 +8,5 @@ Thanks for installing Image2Base64 plugin
 Press Ctrl+i+b (hold Ctrl and consequently press i and b), like image->base64. Then select image to be copied to clipboard as base64 code.
 
 Also if you use Sublime Text 2 you can just click on image file in sidebar or open it and it will be opened as base64 code.
+
+Press Ctrl+u+b (hold Ctrl and consequently press u and b), like url->base64. Then input image url to be copied to clipboard as base64 code. 
