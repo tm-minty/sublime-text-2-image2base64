@@ -16,6 +16,8 @@ settings = sublime.load_settings('Image2Base64.sublime-settings')
 
 def split_line(data):
     cols = settings.get('split_line_cols')
+    if cols is None or cols <= 0:
+        return data
     lines = [data[i:i+cols] for i in range(0, len(data), cols)]
     return "\r\n".join(lines)
 
