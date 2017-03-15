@@ -3,13 +3,22 @@ import sublime
 import sublime_plugin
 import os
 import base64
+import tempfile
+import mimetypes
 
-mime_extensions = {
-    "image/gif":        ["gif"],
-    "image/jpeg":       ["jpg", "jpeg", "jpe"],
-    "image/png":        ["png"],
-    "image/x-icon":     ["ico"],
-    "image/x-ms-bmp":   ["bmp"],
+try:
+    import urllib.request
+    urlretrieve = urllib.request.urlretrieve
+except ImportError:
+    import urllib
+    urlretrieve = urllib.urlretrieve
+
+supported_mime_types = {
+    "image/gif",
+    "image/jpeg",
+    "image/png",
+    "image/x-icon",
+    "image/x-ms-bmp",
 }
 
 settings = sublime.load_settings('Image2Base64.sublime-settings')
@@ -36,10 +45,9 @@ def copy_image_to_clipboard(file_name, image):
 def get_image_info(file_name):
     name, extension = os.path.splitext(file_name)
     extension = extension.lower().replace('.', '')
-    mime = None
-    for m, extensions in mime_extensions.items():
-        if extension in extensions:
-            mime = m
+    mime, encoding = mimetypes.guess_type(file_name)
+    if mime not in supported_mime_types:
+        mime = None
     return name, extension, mime
 
 
@@ -115,3 +123,20 @@ class ImageBase64ToClipboardCommand(sublime_plugin.WindowCommand):
         if item != -1:
             file_name, file_path, mime = self.project_files[item]
             copy_image_to_clipboard(file_name, convert_image(file_path, mime))
+
+class UrlBase64ToClipboardCommand(sublime_plugin.WindowCommand):
+    def run(self):
+        self.window.show_input_panel('Image url to convert to base64', '', self.on_done, self.on_change, self.on_cancel)
+
+    def on_done(self, url):
+        sublime.status_message('Downloading image: %s...' % (url))
+        mime, encoding = mimetypes.guess_type(url)
+        s, file_path = tempfile.mkstemp(prefix='i2b_')
+        urlretrieve(url, file_path)
+        copy_image_to_clipboard(url, convert_image(file_path, mime))
+
+    def on_change(self, url):
+        pass
+
+    def on_cancel(self):
+        pass
