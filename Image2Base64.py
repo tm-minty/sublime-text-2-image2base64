@@ -12,11 +12,17 @@ mime_extensions = {
     "image/x-ms-bmp":   ["bmp"],
 }
 
+settings = sublime.load_settings('Image2Base64.sublime-settings')
+
+def split_line(data):
+    cols = settings.get('split_line_cols')
+    lines = [data[i:i+cols] for i in range(0, len(data), cols)]
+    return "\r\n".join(lines)
 
 def convert_image(file, mime):
     with open(file, "rb") as image_file:
         encoded_bytes = base64.b64encode(image_file.read())
-        return 'data:%s;base64,%s' % (mime, encoded_bytes.decode())
+        return split_line('data:%s;base64,%s' % (mime, encoded_bytes.decode()))
     return None
 
 
