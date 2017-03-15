@@ -16,9 +16,15 @@ except ImportError:
 supported_mime_types = (
     "image/gif",
     "image/jpeg",
+    "image/pjpeg",
     "image/png",
+    "image/svg+xml",
+    "image/tiff",
     "image/x-icon",
     "image/x-ms-bmp",
+    "image/vnd.microsoft.icon",
+    "image/vnd.wap.wbmp",
+    "image/webp",
 )
 
 settings = sublime.load_settings('Image2Base64.sublime-settings')
