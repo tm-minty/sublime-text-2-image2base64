@@ -13,13 +13,13 @@ except ImportError:
     import urllib
     urlretrieve = urllib.urlretrieve
 
-supported_mime_types = {
+supported_mime_types = (
     "image/gif",
     "image/jpeg",
     "image/png",
     "image/x-icon",
     "image/x-ms-bmp",
-}
+)
 
 settings = sublime.load_settings('Image2Base64.sublime-settings')
 
