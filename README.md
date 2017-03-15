@@ -6,6 +6,10 @@ Now supports 2 and 3 version of [Sublime Text](http://www.sublimetext.com/)
 This is a Sublime Text plugin allowing you to open images as converted to base64.
 
 ## Usage
+Press <kbd>Ctlp+p</kbd> and search for "Image2Base64" commands
+
+or
+
 Press <kbd>Ctrl+i+b</kbd> (hold <kbd>Ctrl</kbd> and consequently press <kbd>i</kbd> and <kbd>b</kbd>), 
 like ```i```mage->```b```ase64. Then select image to be copied to clipboard as base64 code.
 
