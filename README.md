@@ -18,6 +18,8 @@ Also if you use Sublime Text 2 you can just click on image file in sidebar or op
 Press <kbd>Ctrl+u+b</kbd> (hold <kbd>Ctrl</kbd> and consequently press <kbd>u</kbd> and <kbd>b</kbd>), 
 like ```u```rl->```b```ase64. Then input image url to be copied to clipboard as base64 code.
 
+*Please note that Sublime Text 2 doesn't support HTTPS so images cannot be loaded over HTTPS*
+
 ## Install
 ### Package Controll
 

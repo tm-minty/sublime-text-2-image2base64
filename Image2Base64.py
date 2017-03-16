@@ -27,6 +27,12 @@ supported_mime_types = (
     "image/webp",
 )
 
+line_endings = {
+    "Unix": "\n",
+    "CR": "\r",
+    "Windows": "\r\n",
+}
+
 settings = sublime.load_settings('Image2Base64.sublime-settings')
 
 def split_line(data):
@@ -34,7 +40,8 @@ def split_line(data):
     if cols is None or cols <= 0:
         return data
     lines = [data[i:i+cols] for i in range(0, len(data), cols)]
-    return "\r\n".join(lines)
+    le = line_endings[sublime.active_window().active_view().line_endings()]
+    return le.join(lines)
 
 def convert_image(file, mime):
     with open(file, "rb") as image_file:
@@ -146,3 +153,13 @@ class UrlBase64ToClipboardCommand(sublime_plugin.WindowCommand):
 
     def on_cancel(self):
         pass
+
+class PasteBase64ImageToCss(sublime_plugin.TextCommand):
+    def run(self, edit):
+        clipboard = sublime.get_clipboard()
+        self.view.insert(edit, self.view.sel()[0].begin(), self.escapeNewline(clipboard))
+
+
+    def escapeNewline(self, str):
+        le = line_endings[self.view.line_endings()]
+        return ("\\" + le).join(str.split(le))

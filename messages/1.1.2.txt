@@ -1,0 +1,6 @@
+Version 1.1.2
+
+Changelog:
+- Base64 line splitting now based on current file line endings type
+- Added command to paste splitted base64 into CSS (with ending backslash)
+    Press Ctrl+p and search "Image2Base64: Paste base64 into CSS"

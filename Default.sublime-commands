@@ -1,0 +1,14 @@
+[
+    {
+        "caption": "Image2Base64: Convert image from opened folders and files", 
+        "command": "image_base64_to_clipboard"
+    },
+    {
+        "caption": "Image2Base64: Convert image from url", 
+        "command": "url_base64_to_clipboard"
+    },
+    {
+        "caption": "Image2Base64: Paste base64 into CSS", 
+        "command": "paste_base64_image_to_css"
+    }
+]

@@ -3,5 +3,5 @@
      * Number of columns to break base64 encoded line
      * To disable line splitting set zero or negative value
      */
-    "split_line_cols": 16000
+    "split_line_cols": 0
 }
